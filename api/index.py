@@ -1,8 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
-import os
-import json
+import os, json
 
 app = FastAPI()
 
@@ -10,14 +9,20 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["POST"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Load telemetry JSON once at startup
+# Load telemetry JSON once
 with open(os.path.join(os.path.dirname(__file__), "q-vercel-latency.json")) as f:
     telemetry = json.load(f)
 
+# Health check endpoint
+@app.get("/")
+def root():
+    return {"message": "Hello FastAPI on Vercel!"}
+
+# Main latency endpoint
 @app.post("/api/latency")
 async def check_latency(request: Request):
     body = await request.json()
