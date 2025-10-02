@@ -36,7 +36,7 @@ async def check_latency(request: Request):
             continue
 
         latencies = [r["latency_ms"] for r in records]
-        uptimes = [r["uptime"] for r in records]
+        uptimes = [r["uptime_pct"] for r in records]
 
         results[region] = {
             "avg_latency": float(np.mean(latencies)),
