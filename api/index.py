@@ -43,9 +43,9 @@ with open(os.path.join(os.path.dirname(__file__), "q-vercel-latency.json")) as f
     telemetry = json.load(f)
 
 # Health check endpoint
-@app.get("/")
-def root():
-    return {"message": "Hello FastAPI on Vercel!"}
+# @app.get("/")
+# def root():
+#     return {"message": "Hello FastAPI on Vercel!"}
 
 # Main latency endpoint
 @app.post("/api/latency")
