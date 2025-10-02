@@ -79,4 +79,4 @@ async def check_latency(request: Request):
 
     # response = JSONResponse(content=results)
     # response.headers["Access-Control-Allow-Origin"] = "*"
-    return results
+    return {"regions": results}
