@@ -6,6 +6,22 @@ import os, json
 
 app = FastAPI()
 
+
+# Global middleware for CORS headers
+@app.middleware("http")
+async def add_cors_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    return response
+
+@app.options("/{full_path:path}")
+async def options_handler(full_path: str):
+    """Catch all OPTIONS requests with CORS headers"""
+    response = JSONResponse(content={})
+    response.headers["Access-Control-Allow-Origin"] = "*"
+
 # Enable CORS for POST requests from any origin
 # app.add_middleware(
 #     CORSMiddleware,
@@ -14,13 +30,13 @@ app = FastAPI()
 #     allow_methods=["*"],
 #     allow_headers=["*"],
 # )
-@app.options("/api/latency")
-async def options_latency():
-    response = JSONResponse(content={})
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "*"
-    return response
+# @app.options("/api/latency")
+# async def options_latency():
+#     response = JSONResponse(content={})
+#     response.headers["Access-Control-Allow-Origin"] = "*"
+#     response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+#     response.headers["Access-Control-Allow-Headers"] = "*"
+#     return response
 
 # Load telemetry JSON once
 with open(os.path.join(os.path.dirname(__file__), "q-vercel-latency.json")) as f:
