@@ -46,4 +46,6 @@ async def check_latency(request: Request):
             "breaches": sum(l > threshold for l in latencies),
         }
 
-    return results
+    response = JSONResponse(content=results)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
